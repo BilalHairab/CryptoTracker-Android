@@ -29,7 +29,7 @@ class CoinListViewModel(
         .onStart {
             loadCoins()
         }
-        //REVIEW(16): stop after all subscribers gone + 5 seconds
+        //REVIEW(15): stop after all subscribers gone + 5 seconds
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), CoinListState())
 
     //REVIEW(13): works, but not recommended, because it acts like a side effect + hardens testing
