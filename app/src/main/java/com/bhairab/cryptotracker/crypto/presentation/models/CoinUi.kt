@@ -3,7 +3,7 @@ package com.bhairab.cryptotracker.crypto.presentation.models
 import android.icu.text.NumberFormat
 import androidx.annotation.DrawableRes
 import com.bhairab.cryptotracker.crypto.domain.Coin
-import com.bhairab.cryptotracker.util.getDrawableIdForCoin
+import com.bhairab.cryptotracker.core.presentation.util.getDrawableIdForCoin
 import java.util.Locale
 
 /**

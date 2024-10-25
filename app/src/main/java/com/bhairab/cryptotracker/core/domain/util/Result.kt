@@ -1,4 +1,4 @@
-package com.bhairab.cryptotracker.util
+package com.bhairab.cryptotracker.core.domain.util
 
 typealias DomainError = Error
 

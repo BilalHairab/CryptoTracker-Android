@@ -1,4 +1,4 @@
-package com.bhairab.cryptotracker.util
+package com.bhairab.cryptotracker.core.presentation.util
 
 import com.bhairab.cryptotracker.R
 
