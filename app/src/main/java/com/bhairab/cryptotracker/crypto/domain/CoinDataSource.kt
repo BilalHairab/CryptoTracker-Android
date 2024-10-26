@@ -2,6 +2,7 @@ package com.bhairab.cryptotracker.crypto.domain
 
 import com.bhairab.cryptotracker.core.domain.util.NetworkError
 import com.bhairab.cryptotracker.core.domain.util.Result
+import java.time.ZonedDateTime
 
 /**
  * Created by Bilal Hairab on 25/10/2024.
@@ -10,4 +11,5 @@ import com.bhairab.cryptotracker.core.domain.util.Result
 //REVIEW(8): data + presentation => can access domain (not vice versa)
 interface CoinDataSource {
     suspend fun getCoins(): Result<List<Coin>, NetworkError>
+    suspend fun getCoinHistory(coinId: String, start: ZonedDateTime, end: ZonedDateTime): Result<List<CoinPrice>, NetworkError>
 }

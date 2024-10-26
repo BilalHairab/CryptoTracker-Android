@@ -6,6 +6,7 @@ import com.bhairab.cryptotracker.core.domain.util.onError
 import com.bhairab.cryptotracker.core.domain.util.onSuccess
 import com.bhairab.cryptotracker.crypto.domain.CoinDataSource
 import com.bhairab.cryptotracker.crypto.presentation.models.CoinListAction
+import com.bhairab.cryptotracker.crypto.presentation.models.CoinUi
 import com.bhairab.cryptotracker.crypto.presentation.models.toCoinUi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 
 /**
  * Created by Bilal Hairab on 25/10/2024.
@@ -42,9 +44,7 @@ class CoinListViewModel(
     fun onAction(action: CoinListAction) {
         when (action) {
             is CoinListAction.OnCoinClickAction -> {
-                _state.update {
-                    it.copy(selectedCoin = action.coinUi)
-                }
+                selectCoin(action.coinUi)
             }
 
             is CoinListAction.OnRefreshAction -> {
@@ -53,6 +53,19 @@ class CoinListViewModel(
         }
     }
 
+    private fun selectCoin(coinUi: CoinUi) {
+        _state.update {
+            it.copy(selectedCoin = coinUi)
+        }
+        viewModelScope.launch {
+            coinDataSource.getCoinHistory(coinId = coinUi.id, start = ZonedDateTime.now().minusDays(5), end = ZonedDateTime.now())
+                .onSuccess { history ->
+                    println(history)
+                }.onError { error ->
+                    _events.send(CoinListEvent.Error(error))
+                }
+        }
+    }
     /* REVIEW(16): Channel Vs. Flow. Channel is emissions of events (no event is cached for new subscribers).
     While Flow gives the last event for each new subscriber */
 
