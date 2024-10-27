@@ -18,7 +18,7 @@ data class ValueLabel(
                 else -> 3
             }
             maximumFractionDigits = fractionDigits
-            maximumIntegerDigits = 0
+            minimumFractionDigits = 0
         }
         return "${formatter.format(value)}$unit"
     }

@@ -150,7 +150,7 @@ fun LineChart(
             bottom = viewPortBottomY
         )
 
-        drawRect(color = Color.Green.copy(alpha = 0.3f), topLeft = viewPort.topLeft, size = viewPort.size)
+//        drawRect(color = Color.Green.copy(alpha = 0.3f), topLeft = viewPort.topLeft, size = viewPort.size)
         xLabelWidth = maxXLabelWidth + xAxisLabelSpacingPx
         xLabelTextLayoutResults.fastForEachIndexed { i, textLayoutResult ->
             val x = viewPortLeftX + xAxisLabelSpacingPx / 2f + xLabelWidth * i
