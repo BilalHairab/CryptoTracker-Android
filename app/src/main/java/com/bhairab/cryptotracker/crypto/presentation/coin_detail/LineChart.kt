@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
@@ -219,6 +220,44 @@ fun LineChart(
                     end = Offset(x = viewPortRightX, y = y + textLayoutResult.size.height.toFloat() / 2f),
                     strokeWidth = style.helperLinesThicknessPx
                 )
+            }
+        }
+
+        drawPoints = visibleDataPointsIndices.map {
+            val x = viewPortLeftX + (it - visibleDataPointsIndices.first) * xLabelWidth + xLabelWidth / 2f
+            //range transformation, from data range to canvas range
+            val ratio = (dataPoints[it].y - minYValue) / (maxYValue - minYValue)
+            val y = viewPortBottomY - (ratio * viewPortHeightPx)
+            DataPoint(x = x, y = y, xLabel = dataPoints[it].xLabel)
+        }
+
+        drawPoints.forEachIndexed { index, dataPoint ->
+            if (isShowingDataPoints) {
+                val circleOffset = Offset(
+                    x = dataPoint.x,
+                    y = dataPoint.y
+                )
+                drawCircle(
+                    color = style.selectedColor,
+                    radius = 10f,
+                    center = circleOffset
+                )
+
+                if (selectedDataPointIndex == index) {
+                    drawCircle(
+                        color = Color.White,
+                        radius = 15f,
+                        center = circleOffset
+                    )
+                    drawCircle(
+                        color = style.selectedColor,
+                        radius = 15f,
+                        center = circleOffset,
+                        style = Stroke(
+                            width = 3f
+                        )
+                    )
+                }
             }
         }
     }
