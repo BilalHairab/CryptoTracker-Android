@@ -61,7 +61,7 @@ fun LineChart(
         visibleDataPoints.maxOfOrNull { it.y } ?: 0f
     }
     val minYValue = remember(visibleDataPoints) {
-        visibleDataPoints.minOfOrNull { it.x } ?: 0f
+        visibleDataPoints.minOfOrNull { it.y } ?: 0f
     }
     val measurer = rememberTextMeasurer()
 
