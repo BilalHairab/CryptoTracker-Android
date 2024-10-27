@@ -1,5 +1,6 @@
 package com.bhairab.cryptotracker.crypto.presentation.coin_detail
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +20,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -108,7 +114,34 @@ fun CoinDetailScreen(
                     icon = if (isPositive) ImageVector.vectorResource(id = R.drawable.trending) else ImageVector.vectorResource(id = R.drawable.trending_down),
                     contentColor = contentColor
                 )
-
+            }
+            AnimatedVisibility(visible = coin.coinPriceHistory.isNotEmpty()) {
+                var selectedDataPoint by remember {
+                    mutableStateOf<DataPoint?>(null)
+                }
+                LineChart(dataPoints = coin.coinPriceHistory,
+                    style = ChartStyle(
+                        chartLineColor = MaterialTheme.colorScheme.primary,
+                        unselectedColor = MaterialTheme.colorScheme.secondary,
+                        selectedColor = MaterialTheme.colorScheme.primary,
+                        helperLinesThicknessPx = 5f,
+                        axisLinesThicknessPx = 5f,
+                        labelFontSize = 14.sp,
+                        minYLabelSpacing = 25.dp,
+                        verticalPadding = 8.dp,
+                        horizontalPadding = 8.dp,
+                        xAxisLabelSpacing = 8.dp,
+                    ),
+                    visibleDataPointsIndices = coin.coinPriceHistory.indices,
+                    unit = "$",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(16 / 9f),
+                    selectedDataPoint = selectedDataPoint,
+                    onDataPointSelected = {
+                        selectedDataPoint = it
+                    }
+                )
             }
         }
     }

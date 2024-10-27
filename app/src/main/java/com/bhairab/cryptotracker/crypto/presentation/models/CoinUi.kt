@@ -4,6 +4,7 @@ import android.icu.text.NumberFormat
 import androidx.annotation.DrawableRes
 import com.bhairab.cryptotracker.crypto.domain.Coin
 import com.bhairab.cryptotracker.core.presentation.util.getDrawableIdForCoin
+import com.bhairab.cryptotracker.crypto.presentation.coin_detail.DataPoint
 import java.util.Locale
 
 /**
@@ -17,6 +18,7 @@ data class CoinUi(
     val marketCapUsd: DisplayableNumber,
     val priceUsd: DisplayableNumber,
     val changePercent24Hr: DisplayableNumber,
+    val coinPriceHistory: List<DataPoint> = emptyList(),
     @DrawableRes val iconRes: Int,
 )
 

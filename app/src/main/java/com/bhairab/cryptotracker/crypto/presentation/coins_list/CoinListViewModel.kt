@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.bhairab.cryptotracker.core.domain.util.onError
 import com.bhairab.cryptotracker.core.domain.util.onSuccess
 import com.bhairab.cryptotracker.crypto.domain.CoinDataSource
+import com.bhairab.cryptotracker.crypto.presentation.coin_detail.DataPoint
 import com.bhairab.cryptotracker.crypto.presentation.models.CoinListAction
 import com.bhairab.cryptotracker.crypto.presentation.models.CoinUi
 import com.bhairab.cryptotracker.crypto.presentation.models.toCoinUi
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * Created by Bilal Hairab on 25/10/2024.
@@ -60,6 +62,23 @@ class CoinListViewModel(
         viewModelScope.launch {
             coinDataSource.getCoinHistory(coinId = coinUi.id, start = ZonedDateTime.now().minusDays(5), end = ZonedDateTime.now())
                 .onSuccess { history ->
+                    val dataPoints = history.sortedBy {
+                        it.dateTime
+                    }.map {
+                        DataPoint(
+                            x = it.dateTime.hour.toFloat(),
+                            y = it.priceUsd.toFloat(),
+                            xLabel = DateTimeFormatter.ofPattern("ha\nM/d").format(it.dateTime)
+                        )
+                    }
+
+                    _state.update {
+                        it.copy(
+                            selectedCoin = it.selectedCoin?.copy(
+                                coinPriceHistory = dataPoints
+                            )
+                        )
+                    }
                     println(history)
                 }.onError { error ->
                     _events.send(CoinListEvent.Error(error))
